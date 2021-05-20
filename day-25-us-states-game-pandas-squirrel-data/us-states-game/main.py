@@ -32,16 +32,14 @@ while len(user_guessed_states) < 50:
     # Exit when cancled or type Exit
     # save missed states into a csv
     if not user_input or user_input.title() == "Exit":
-        user_missed_states  = []
-        states = states_df.state.to_list()
-
-        for state in states:
-            if state not in user_guessed_states:
-                user_missed_states.append(state)
-
-        pandas.DataFrame(user_missed_states).to_csv("states_to_learn.csv")
+        user_missed_states = [
+            state for state in states_df.state.to_list()
+            if state not in user_guessed_states
+        ]
+        missed_states = pandas.DataFrame(user_missed_states)
+        missed_states.to_csv("states_to_learn.csv")
         break
-    
+
     # check if the user input was correct and write that state on the map
     state_results = check_state(user_input.title())
     if not state_results.empty:
